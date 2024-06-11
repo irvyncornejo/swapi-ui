@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .serializers import (
@@ -67,6 +68,15 @@ class ProfileView(APIView):
 class PeopleView(ListAPIView):
     queryset = People.objects.all()
     serializer_class = PeopleSerializer
+
+
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+class SearchView(ListAPIView):
+    queryset = People.objects.all()
+    serializer_class = PeopleSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'homeworld', 'gender', 'hair_color']
 
 
 

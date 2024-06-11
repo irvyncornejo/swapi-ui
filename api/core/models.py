@@ -11,9 +11,6 @@ class AbstractBaseModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['-created_at']
-    
-    def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} {self.id}>'
 
     def __str__(self) -> str:
         return f'{self.id}'
