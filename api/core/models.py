@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 
 class AbstractBaseModel(models.Model):
@@ -14,63 +13,49 @@ class AbstractBaseModel(models.Model):
         ordering = ['-created_at']
     
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} {self.uuid}>'
+        return f'<{self.__class__.__name__} {self.id}>'
 
     def __str__(self) -> str:
-        return f'{self.uuid}'
+        return f'{self.id}'
 
 
-class User(AbstractBaseUser, PermissionsMixin, AbstractBaseUser):
-    email = models.EmailField(unique=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'email'
-
-    def __str__(self) -> str:
-        return self.email
-
-class Films(AbstractBaseModel):
+class Film(AbstractBaseModel):
     title=models.CharField(max_length=100)
-    episode_id=models.CharField()
-    opening_crawl=models.CharField()
-    director=models.CharField()
-    producer=models.CharField()
-    release_date=models.CharField()
-    external_reference=models.IntegerField(max_length=10)
+    episode_id=models.CharField(max_length=20)
+    opening_crawl=models.CharField(max_length=20)
+    director=models.CharField(max_length=20)
+    producer=models.CharField(max_length=20)
+    release_date=models.DateField()
+    external_reference=models.IntegerField()
+    def __str__(self):
+        return self.title
 
-class Planets(AbstractBaseModel):
+class Planet(AbstractBaseModel):
     name=models.CharField(max_length=100)
-    rotation_period=models.CharField()
-    orbital_period=models.CharField()
-    diameter=models.CharField()
-    climate=models.CharField()
-    gravity=models.CharField()
-    terrain=models.CharField()
-    surface_water=models.CharField()
-    population=models.CharField()
+    rotation_period=models.CharField(max_length=20)
+    orbital_period=models.CharField(max_length=20)
+    diameter=models.CharField(max_length=20)
+    climate=models.CharField(max_length=20)
+    gravity=models.CharField(max_length=20)
+    terrain=models.CharField(max_length=20)
+    surface_water=models.CharField(max_length=20)
+    population=models.CharField(max_length=20)
+    external_reference=models.IntegerField()
 
-class Species(AbstractBaseModel):
-    name=models.CharField(max_length=100)
-    classification=models.CharField()
-    designation=models.CharField()
-    average_height=models.CharField()
-    skin_colors=models.CharField()
-    hair_colors=models.CharField()
-    eye_colors=models.CharField()
-    average_lifespan=models.CharField()
-    homeworld=models.CharField()
-    language=models.CharField()
+    def __str__(self):
+        return self.name
 
 class People(AbstractBaseModel):
     name=models.CharField(max_length=100)
-    age=models.CharField()
-    height=models.CharField()
-    mass=models.CharField()
-    hairColor=models.CharField()
-    gender=models.CharField()
-    homeworld=models.CharField()
-    dob=models.CharField()
-    films=models.ManyToManyField('Films')
+    height=models.CharField(max_length=10)
+    mass=models.CharField(max_length=10)
+    hair_color=models.CharField(max_length=20)
+    gender=models.CharField(max_length=10)
+    homeworld=models.ForeignKey(Planet, on_delete=models.CASCADE, related_name='planet', null=True)
+    dob=models.CharField(max_length=10)
+    films=models.ManyToManyField(Film, related_name='films', null=True)
+    img=models.URLField(blank=True, null=True)
 
-
+    def __str__(self):
+        return self.name
