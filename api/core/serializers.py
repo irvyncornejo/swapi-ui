@@ -43,7 +43,9 @@ class PeopleSerializer(serializers.ModelSerializer):
         return obj.img
 
     def get_height(self, obj):
-        return '{} M'.format(obj.height)
+        return '{} cm'.format(obj.height)
     
     def get_mass(self, obj):
-        return '{} Kg'.format(obj.mass)
+        if obj.mass and obj.mass != 'unknown':
+            return f'{float(obj.mass)/100} Kg'
+        return obj.mass
