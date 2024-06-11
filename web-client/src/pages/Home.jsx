@@ -1,4 +1,5 @@
 import Search from "../components/Search"
+import Pagination from "../components/Pagination"
 
 const data_people = [
     {
@@ -124,6 +125,7 @@ const Home = () => {
               ))}
             </div>
           </div>
+          <Pagination/>
         </div>
       )
 }
